@@ -77,6 +77,25 @@ export default {
         if (a.includes("javascript:{}")) {
           a = a.replace(/javascript:{}\s?/g, "");
         }
+
+        //bkz strings to a click event by vue to open new entry.
+        let quoteBkz = a.matchAll(/\`(.*?)\`/g);
+        let qMatches = [...quoteBkz];
+        if (qMatches.length > 0) {
+          for (const entrybkz of qMatches) {
+            let reg = entrybkz;
+            let aElement = `<a class="bkz-a" vue-use-this='${reg[1]
+              .trimStart()
+              .replace(" ", "-")}' target="_blank" href="${
+              window.location.origin
+            }/?type=baslik&link=${reg[1]
+              .trimStart()
+              .split(" ")
+              .join("-")}">${reg[1]}</a>`;
+            a = a.replace(entrybkz[0], aElement);
+          }
+        }
+
         return a;
       }
     },
@@ -89,8 +108,8 @@ export default {
     bkzWindow() {
       setTimeout(() => {
         let bkz = this.$refs.metin.querySelectorAll("a[vue-use-this]");
-        bkz.forEach((element) => {
-          element.onclick = (e) => {
+        bkz.forEach(element => {
+          element.onclick = e => {
             e.preventDefault();
             let att = element.getAttribute("vue-use-this");
             let windowValue = {
@@ -98,23 +117,23 @@ export default {
               baslik: att,
               link: att.replace(" ", "-"),
               sayfa: 1,
-              toplamSayfa: 1,
+              toplamSayfa: 1
             };
             this.$store.commit("addWindow", windowValue);
             this.$store.dispatch("changeState", {
               type: "baslik",
               baslik: windowValue.baslik,
-              basliklink: windowValue.link,
+              basliklink: windowValue.link
             });
           };
         });
       }, 50);
-    },
+    }
   },
 
   mounted() {
     this.bkzWindow();
-  },
+  }
 };
 </script>
 
