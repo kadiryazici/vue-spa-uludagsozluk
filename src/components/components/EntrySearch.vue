@@ -46,7 +46,7 @@ export default {
   methods: {
     openEntry(v) {
       let windowValue = {
-        type: "Entry",
+        type: "baslik",
         baslik: v.baslik,
         link: v.basliklink,
         sayfa: 1,
