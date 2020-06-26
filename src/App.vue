@@ -1,12 +1,12 @@
 <template>
   <div id="app">
-    <navbar />
-    <div class="content">
+    <Navbar />
+    <div :class="{ blurry: $store.getters['getSearchBox'] == true }" class="content">
       <div class="left">
-        <leftFrame />
+        <left-frame />
       </div>
       <div class="right">
-        <rightFrame />
+        <right-frame />
       </div>
     </div>
   </div>
@@ -32,7 +32,7 @@ export default {
           baslik: link.replace(/-/gim, " "),
           link: link,
           sayfa: 1,
-          toplamSayfa: 1,
+          toplamSayfa: 1
         };
         window.history.pushState("", "", "/");
 
@@ -40,7 +40,7 @@ export default {
         this.$store.dispatch("changeState", {
           type: windowValue.type,
           basliklink: windowValue.link,
-          baslik: windowValue.baslik,
+          baslik: windowValue.baslik
         });
       }
     },
@@ -48,13 +48,13 @@ export default {
      * @description Handles navigation.
      */
     popState() {
-      window.onpopstate = (e) => {
+      window.onpopstate = e => {
         if (e.state == null || e.state == "") {
           //if user goes to main page.
           document.title = "Vuedag";
           this.$store.commit("closeWindowsByRange", {
             from: 1,
-            to: this.windowCount,
+            to: this.windowCount
           });
         } else {
           //if user doesnt go to first page.
@@ -65,18 +65,18 @@ export default {
               baslik,
               link,
               sayfa: 1,
-              toplamSayfa: 1,
+              toplamSayfa: 1
             });
           } else {
             //if user wants to go backward
             this.$store.commit("closeWindowsByRange", {
               from: e.state.i,
-              to: this.windowCount,
+              to: this.windowCount
             });
           }
         }
       };
-    },
+    }
   },
   mounted() {
     this.$store.dispatch("fetchGundem");
@@ -92,13 +92,13 @@ export default {
     },
     isBack() {
       return this.$store.getters.getBack;
-    },
+    }
   },
   watch: {
     isBack() {
       window.history.back();
-    },
-  },
+    }
+  }
 };
 </script>
 
@@ -130,9 +130,15 @@ body {
 
 .content {
   display: flex;
+  transition: filter 0.3s, -webkit-filter 0.3s;
   flex-wrap: nowrap;
   max-height: calc(100vh - 65px);
   height: calc(100vh - 65px);
+}
+
+.content.blurry {
+  -webkit-filter: blur(10px);
+  filter: blur(10px);
 }
 
 .left {
@@ -170,6 +176,7 @@ body {
 :root {
   --uludag-theme: #546fa1;
   --uludag-dark-purple: rgb(45, 45, 57);
+  --uludag-dark-purple-opacity: rgba(45, 45, 57, 0.55);
   --uludag-dark: rgb(20, 20, 20);
   --uludag-dark-purple-shadow: 0px 0px 8px -1px rgba(41, 42, 58, 0.438);
   --uludag-light: rgb(230, 230, 230);

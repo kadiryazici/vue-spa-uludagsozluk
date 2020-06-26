@@ -2,15 +2,9 @@
   <div @click.self="$emit('close')" class="search fixed-top w-100 text-center">
     <div class="w-100 d-flex search-wrapper align-items-center">
       <div style="margin-top:5rem" class="w-100 text-center">
-        <input
-          v-model="text"
-          class="search-box"
-          type="text"
-          placeholder="Ara"
-          ref="searchinput"
-        />
+        <input v-model="text" class="search-box" type="text" placeholder="Ara" ref="searchinput" />
       </div>
-      <h3 class="position-relative">SONUÇLAR</h3>
+      <h3 v-if="results.length > 0" class="position-relative">SONUÇLAR</h3>
       <div class="results">
         <div class="result-list">
           <div
@@ -18,9 +12,7 @@
             v-for="value in results.aramasonuc"
             :key="value.basliklink"
             class="result"
-          >
-            {{ value.baslik }}
-          </div>
+          >{{ value.baslik }}</div>
         </div>
       </div>
     </div>
@@ -34,18 +26,22 @@ export default {
     return {
       text: "",
       results: [],
+      time: null
     };
   },
   watch: {
     text(v) {
       let vueThis = this;
-      this.$store.dispatch("fetchSearch", {
-        text: v.toLocaleLowerCase("tr-TR"),
-        callback(data) {
-          vueThis.results = data;
-        },
-      });
-    },
+      clearTimeout(vueThis.time);
+      vueThis.time = setTimeout(() => {
+        vueThis.$store.dispatch("fetchSearch", {
+          text: v.toLocaleLowerCase("tr-TR"),
+          callback(data) {
+            vueThis.results = data;
+          }
+        });
+      }, 300);
+    }
   },
   methods: {
     openEntry(v) {
@@ -54,20 +50,20 @@ export default {
         baslik: v.baslik,
         link: v.basliklink,
         sayfa: 1,
-        toplamSayfa: 1,
+        toplamSayfa: 1
       };
       this.$store.commit("addWindow", windowValue);
       this.$store.dispatch("changeState", {
-        type: "Entry",
+        type: "baslik",
         baslik: v.baslik,
-        basliklink: v.basliklink,
+        basliklink: v.basliklink
       });
       this.$emit("close");
-    },
+    }
   },
   mounted() {
     this.$refs.searchinput.focus();
-  },
+  }
 };
 </script>
 
@@ -75,7 +71,7 @@ export default {
 .search {
   height: calc(100vh - 32px);
   margin-top: 32px;
-  background-color: rgba(0, 0, 0, 0.918);
+  background-color: rgba(0, 0, 0, 0.493);
   width: 100%;
   z-index: 999;
 }
@@ -120,32 +116,13 @@ h3::after {
   text-align: left;
   padding: 20px 15px;
   margin: 5px 0px;
-  background-color: var(--uludag-dark-purple);
+  background-color: var(--uludag-dark-purple-opacity);
   cursor: pointer;
-  /* backdrop-filter: blur(10px); */
   position: relative;
 }
 
-.result::after {
-  content: "";
-  width: 100%;
-  opacity: 0;
-  height: 100%;
-  left: 0px;
-  pointer-events: none;
-  position: absolute;
-  top: 0;
-  background: rgb(238, 129, 56);
-  z-index: 0;
-  background: var(--active-gradient);
-}
-
-.result:hover::after {
-  opacity: 1;
-}
-
 .result:hover {
-  background-color: rgb(22, 21, 21);
+  background-color: var(--uludag-dark-purple);
 }
 
 .search-box {
@@ -154,10 +131,8 @@ h3::after {
   outline: none;
   border-radius: 5px;
   background-color: var(--uludag-dark-purple);
-  border: 2px solid;
+  border: 2px solid var(--uluadag-theme);
   color: white;
-  border-image-slice: 1;
-  border-image-source: linear-gradient(to left, #743ad5, var(--uludag-theme));
   font-weight: bold;
 }
 

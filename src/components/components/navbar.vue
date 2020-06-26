@@ -1,12 +1,22 @@
 <template>
   <nav class="fixed-top navbar">
-    <entry-search @close="search = false" v-if="search" />
+    <keep-alive>
+      <entry-search
+        @close="$store.commit('setSearchBox', false)"
+        v-if="$store.getters['getSearchBox']"
+      />
+    </keep-alive>
     <div class="position-relative title-bar">
       <small
         class="info-title position-absolute title w-100 h-100 d-flex align-items-center justify-content-center"
       >{{ "ULUDAĞ SÖZLÜK" }}</small>
       <div class="search">
-        <button @click="search = !search" class="min">
+        <button
+          @click="
+            $store.commit('setSearchBox', !$store.getters['getSearchBox'])
+          "
+          class="min"
+        >
           <span style="font-size:21px" class="material-icons pr-2">search</span>
           Arama
         </button>

@@ -18,11 +18,16 @@ export default {
       } else {
         let b = v;
         b.replace("<", "&lsaquo;");
-        b.replace(">", "&lsaquo;");
-        let a = b.split(/\s\s\s?/g).join(" <br>");
+        b.replace(">", "&rsaquo;");
+        let a;
+        if (this.$parent.no) {
+          a = b.split(/\s\s\s?/g).join(" <br>");
+        } else {
+          a = b.split("\n").join(" <br>");
+        }
 
         //Link strings to A element.
-        let links = a.matchAll(/(https?:\/\/[^\s]+)/g);
+        let links = a.matchAll(/(https?:\/\/[^\s\[]+)/g);
         let linkMatches = [...links];
         if (linkMatches.length > 0) {
           for (const alink of linkMatches) {
@@ -78,7 +83,7 @@ export default {
           a = a.replace(/javascript:{}\s?/g, "");
         }
 
-        //bkz strings to a click event by vue to open new entry.
+        // strings betwween ` to a click event by vue to open new entry.
         let quoteBkz = a.matchAll(/\`(.*?)\`/g);
         let qMatches = [...quoteBkz];
         if (qMatches.length > 0) {

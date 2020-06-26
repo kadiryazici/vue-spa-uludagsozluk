@@ -9,6 +9,7 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
+    searchBox: false,
     isBack: "",
     loadPage: false,
     leftFrame: [],
@@ -34,6 +35,9 @@ export default new Vuex.Store({
     },
     getBack(state) {
       return state.isBack;
+    },
+    getSearchBox(state) {
+      return state.searchBox;
     },
   },
   /*-----------------------------------------------------*/
@@ -61,6 +65,9 @@ export default new Vuex.Store({
         let a = state.openWindows.length - 1;
         window.history.go(-a);
       }
+    },
+    setSearchBox(state, payload) {
+      state.searchBox = payload;
     },
   },
   /*-----------------------------------------------------*/
