@@ -4,7 +4,7 @@
       <div style="margin-top:5rem" class="w-100 text-center">
         <input v-model="text" class="search-box" type="text" placeholder="Ara" ref="searchinput" />
       </div>
-      <h3 v-if="results.length > 0" class="position-relative">SONUÇLAR</h3>
+      <h3 v-if="results.aramasonuc " class="position-relative">SONUÇLAR</h3>
       <div class="results">
         <div class="result-list">
           <div
@@ -63,6 +63,9 @@ export default {
   },
   mounted() {
     this.$refs.searchinput.focus();
+  },
+  activated() {
+    console.log("annen");
   }
 };
 </script>

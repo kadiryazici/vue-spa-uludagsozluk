@@ -1,8 +1,6 @@
 <template>
   <div ref="metin" class="entry-wrapper py-1">
-    <h3 class="text-center pt-5" v-if="entry.length < 1">
-      {{ Loading }}
-    </h3>
+    <h3 class="text-center pt-5" v-if="entry.length < 1">{{ Loading }}</h3>
     <entry-box
       v-for="(value, index) in entry.entrybilgi"
       :key="index"
@@ -18,17 +16,17 @@ import { mapGetters, mapActions } from "vuex";
 export default {
   data: () => ({
     entry: [],
-    Loading: "Yükleniyor...",
+    Loading: "Yükleniyor..."
   }),
   props: ["entryData", "beginning"],
   computed: {
     ...mapGetters({
-      currentWindow: "getCurrentWindow",
-    }),
+      currentWindow: "getCurrentWindow"
+    })
   },
   methods: {
     ...mapActions({
-      fetchEntry: "fetchEntry",
+      fetchEntry: "fetchEntry"
     }),
     /**
      *
@@ -41,7 +39,7 @@ export default {
       this.fetchEntry({
         link: this.entryData.link,
         ba,
-        callback: (data) => {
+        callback: data => {
           if (data === "error" || data.hata) {
             this.Loading =
               "Başlık henüz açılmamış ya da veriler çekilirken bir hata oluştu.";
@@ -66,18 +64,18 @@ export default {
               );
             }
           }
-        },
+        }
       });
-    },
+    }
   },
   mounted() {
-    this.getEntry();
+    this.getEntry(this.beginning || 1);
   },
   watch: {
     beginning(v) {
       this.getEntry(v);
-    },
-  },
+    }
+  }
 };
 </script>
 

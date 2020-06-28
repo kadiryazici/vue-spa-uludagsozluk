@@ -1,28 +1,22 @@
 <template>
   <div class="pb-1 pt-0 left-wrapper">
-    <h6
-      style="z-index:50"
-      class="left-header sticky-top d-flex align-items-center m-0"
-    >
+    <h6 style="z-index:50" class="left-header sticky-top d-flex align-items-center m-0">
       <span style="padding-bottom:6px">Gündem</span>
       <span
         tabindex="0"
         @click="$store.dispatch('fetchGundem')"
         class="mb-1 refresh ml-auto material-icons"
-        >refresh</span
-      >
+      >refresh</span>
     </h6>
     <div class="h-100" style="overflow-x:hidden;overflow-y:auto;">
       <h6
         v-if="basliklar.bugun == undefined"
         class="m-0 p-3 text-center"
         style="font-size:15px;font-weight:bold;color:white"
-      >
-        Yükleniyor..
-      </h6>
+      >Yükleniyor..</h6>
       <transition-group enter-active-class="fadeInLeft">
         <div
-          @click="addEntryWindow(value, i)"
+          @click="addEntryWindow(value, value.bugunki_sayisi)"
           v-for="(value, i) in basliklar.bugun"
           :key="i + 5"
           class="baslik"
@@ -48,18 +42,13 @@
 
 <script>
 export default {
-  data() {
-    return {
-      currentEntry: null,
-    };
-  },
   computed: {
     basliklar() {
       return this.$store.getters.getLeft;
     },
     currentWindow() {
       return this.$store.getters.getCurrentWindow;
-    },
+    }
   },
   watch: {},
   methods: {
@@ -71,26 +60,26 @@ export default {
      */
     addEntryWindow(value, i) {
       let entry = this.$store.getters.getCurrentWindow;
-
+      let gundem = parseInt(i);
       if (entry.baslik != value.baslik) {
-        this.currentEntry = i;
         this.$store.commit("addWindow", {
           type: "baslik",
           baslik: value.baslik,
           link: value.basliklink,
           sayfa: 1,
           toplamSayfa: 1,
+          gundemSayfa: Math.ceil(20 / gundem)
         });
         this.$store.dispatch("changeState", { type: "baslik", ...value });
       }
     },
     winFilter(link) {
       let wins = this.$store.getters.getOpenWindows;
-      let results = wins.filter((value) => value.link == link);
+      let results = wins.filter(value => value.link == link);
 
       return results.length > 0 ? results : [{ link: null }];
-    },
-  },
+    }
+  }
 };
 </script>
 

@@ -26,13 +26,17 @@ export default {
       let param = new URLSearchParams(params.search.slice(1));
       let type = param.get("type");
       let link = param.get("link");
+      let sayfa = param.get("sayfa");
+      if (sayfa < 1) {
+        sayfa = 1;
+      }
       if (type && link) {
         let windowValue = {
           type,
           baslik: link.replace(/-/gim, " "),
           link: link,
-          sayfa: 1,
-          toplamSayfa: 1
+          sayfa: sayfa || 1,
+          toplamSayfa: 9999
         };
         window.history.pushState("", "", "/");
 

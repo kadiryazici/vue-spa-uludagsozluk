@@ -64,6 +64,7 @@ export default new Vuex.Store({
       if (state.openWindows.length > 1) {
         let a = state.openWindows.length - 1;
         window.history.go(-a);
+        state.arrowTime = 0;
       }
     },
     setSearchBox(state, payload) {
@@ -147,17 +148,31 @@ export default new Vuex.Store({
      * @param {String} payload.type
      */
     changeState({ state }, payload) {
-      window.history.pushState(
-        {
-          baslik: payload.baslik,
-          type: payload.type,
-          link: payload.basliklink,
-          i: state.openWindows.length,
-        },
-        "",
-        `?type=${payload.type}&link=${payload.basliklink}`
-      );
-      document.title = payload.baslik + " | Vuedag";
+      let useObject = {
+        baslik: state.openWindows[state.openWindows.length - 1].baslik,
+        type: state.openWindows[state.openWindows.length - 1].type,
+        link: state.openWindows[state.openWindows.length - 1].link,
+        i: state.openWindows.length + state.arrowTime,
+        sayfa: state.openWindows[state.openWindows.length - 1].sayfa,
+      };
+      if (!payload.replace) {
+        window.history.pushState(
+          useObject,
+          "",
+          `?type=${useObject.type}&link=${useObject.link}${
+            useObject.type == "baslik" ? `&sayfa=${useObject.sayfa}` : ""
+          }`
+        );
+        document.title = useObject.baslik + " | Vuedag";
+      } else {
+        window.history.replaceState(
+          useObject,
+          "",
+          `?type=${useObject.type}&link=${useObject.link}${
+            useObject.type == "baslik" ? `&sayfa=${useObject.sayfa}` : ""
+          }`
+        );
+      }
     },
   },
 });
