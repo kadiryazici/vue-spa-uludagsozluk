@@ -1,9 +1,6 @@
 <template>
   <div class="position-relative h-100 w-100">
-    <transition-group
-      enter-active-class="fadeInLeft"
-      leave-active-class="fadeOutRight closing"
-    >
+    <transition-group enter-active-class="fadeInLeft" leave-active-class="fadeOutRight closing">
       <div
         v-for="(value, index) in windows"
         :key="index + 5"
@@ -18,15 +15,14 @@
         }"
       >
         <div v-if="index > 0" class="back-button">
-          <span @click="closeWindow" class="pt-2 pl-3 pb-2 icon material-icons"
-            >arrow_back_ios</span
-          >
+          <span @click="closeWindow" class="pt-2 pl-3 pb-2 icon material-icons">arrow_back_ios</span>
           <p class="title">{{ value.baslik.split("-").join(" ") }}</p>
           <span class="ml-auto mr-3">
             <ulu-select
               class="select-none"
               :current="value.sayfa"
               :max="value.toplamSayfa"
+              v-if="value.type == 'baslik'"
             />
           </span>
         </div>
@@ -35,17 +31,12 @@
           <span
             style="visibility:hidden;pointer-events:none;margin-right:-43px"
             class="pt-2 pl-3 pb-2 icon material-icons"
-            >arrow_back_ios</span
-          >
+          >arrow_back_ios</span>
           <p class="title">{{ "Tavsiyeler" }}</p>
         </div>
 
         <div style="color:white" class="h-100 windowContent">
-          <Entry
-            v-if="value.type === 'baslik'"
-            :entryData="value"
-            :beginning="value.sayfa"
-          />
+          <Entry v-if="value.type === 'baslik'" :entryData="value" :beginning="value.sayfa" />
           <main-page v-else-if="value.type === 'Main'" />
         </div>
       </div>
@@ -58,14 +49,14 @@ import { mapGetters } from "vuex";
 export default {
   computed: {
     ...mapGetters({
-      windows: "getOpenWindows",
-    }),
+      windows: "getOpenWindows"
+    })
   },
   methods: {
     closeWindow() {
       this.$store.commit("setBack");
-    },
-  },
+    }
+  }
 };
 </script>
 

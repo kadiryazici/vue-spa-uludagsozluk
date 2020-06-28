@@ -39,18 +39,31 @@ export default {
         //bkz strings to a click event by vue to open new entry.
         let bkz = a.matchAll(/\(bkz:([^)]+)\)/g);
         let matches = [...bkz];
+
         if (matches.length > 0) {
           for (const entrybkz of matches) {
             let reg = entrybkz;
-            let aElement = `<a class="bkz-a" vue-use-this='${reg[1]
-              .trimStart()
-              .replace(" ", "-")}' target="_blank" href="${
-              window.location.origin
-            }/?type=baslik&link=${reg[1]
-              .trimStart()
-              .split(" ")
-              .join("-")}">${reg[0]}</a>`;
-            a = a.replace(entrybkz[0], aElement);
+
+            if (!reg[0].includes("#")) {
+              let aElement = `<a class="bkz-a" vue-use-this='${reg[1]
+                .trimStart()
+                .replace(" ", "-")}' target="_blank" 
+                href="${window.location.origin}/?type=baslik&link=${reg[1]
+                .trimStart()
+                .split(" ")
+                .join("-")}">${reg[0]}</a>`;
+
+              a = a.replace(entrybkz[0], aElement);
+            } else {
+              let aElement = `<a class="bkz-a" vue-use-this='${reg[1]
+                .trimStart()
+                .replace(" ", "-")}' target="_blank" 
+                href="${window.location.origin}/?type=entry&link=${reg[1]
+                .split("#")[1]
+                .trimStart()}">${reg[0]}</a>`;
+
+              a = a.replace(entrybkz[0], aElement);
+            }
           }
         }
 
@@ -116,20 +129,41 @@ export default {
         bkz.forEach(element => {
           element.onclick = e => {
             e.preventDefault();
+
             let att = element.getAttribute("vue-use-this");
-            let windowValue = {
-              type: "baslik",
-              baslik: att,
-              link: att.replace(" ", "-"),
-              sayfa: 1,
-              toplamSayfa: 1
-            };
-            this.$store.commit("addWindow", windowValue);
-            this.$store.dispatch("changeState", {
-              type: "baslik",
-              baslik: windowValue.baslik,
-              basliklink: windowValue.link
-            });
+
+            if (att.includes("#")) {
+              let value = att.split("#");
+
+              let windowValue = {
+                type: "entry",
+                baslik: (value[0] + " | #" + value[1]).replace(/\//g, ""),
+                basliklink: value[1]
+              };
+
+              this.$store.commit("addWindow", windowValue);
+              this.$store.dispatch("changeState", {
+                type: "entry",
+                baslik: windowValue.baslik,
+                basliklink: windowValue.basliklink
+              });
+            } else {
+              let windowValue = {
+                type: "baslik",
+                baslik: att,
+                link: att.replace(" ", "-"),
+                sayfa: 1,
+                toplamSayfa: 1
+              };
+
+              this.$store.commit("addWindow", windowValue);
+
+              this.$store.dispatch("changeState", {
+                type: "baslik",
+                baslik: windowValue.baslik,
+                basliklink: windowValue.link
+              });
+            }
           };
         });
       }, 50);

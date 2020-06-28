@@ -15,7 +15,7 @@
         {{ "Yükleniyor..." }}
         <span v-if="!fetching" class="ml-2 material-icons">refresh</span>
       </button>
-      <div>
+      <div class="w-100">
         <entry-box
           v-for="(value, i) in entries"
           :key="i + 2"
