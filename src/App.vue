@@ -53,6 +53,7 @@ export default {
      */
     popState() {
       window.onpopstate = e => {
+        console.log(e);
         if (e.state == null || e.state == "") {
           //if user goes to main page.
           document.title = "Vuedag";

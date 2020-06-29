@@ -152,7 +152,7 @@ export default new Vuex.Store({
         baslik: state.openWindows[state.openWindows.length - 1].baslik,
         type: state.openWindows[state.openWindows.length - 1].type,
         link: state.openWindows[state.openWindows.length - 1].link,
-        i: state.openWindows.length + state.arrowTime,
+        i: state.openWindows.length,
         sayfa: state.openWindows[state.openWindows.length - 1].sayfa,
       };
       if (!payload.replace) {

@@ -58,7 +58,6 @@ export default {
             useValue = parseInt(this.currentPage) + 1;
           }
         }
-        this.$store.commit("setArrowTime");
       } else {
         useValue = value;
       }
