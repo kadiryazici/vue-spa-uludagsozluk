@@ -7,7 +7,8 @@
     >arrow_back_ios</span>
     <div ref="select_element" tabindex="5" class="select-wrapper">
       <div class="view-area">
-        <span style="color:var(--uludag-theme)">{{ currentPage }}</span>/
+        <span style="color:var(--uludag-theme)">{{ currentPage }}</span>
+        <span>&nbsp;/&nbsp;</span>
         <span>{{ max }}</span>
       </div>
       <div class="options">

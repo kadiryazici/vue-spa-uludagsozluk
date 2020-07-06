@@ -9,17 +9,19 @@ import EntryText from "./components/EntryText.vue";
 import EntrySearch from "./components/EntrySearch.vue";
 import Mainpage from "./components/Mainpage.vue";
 import EntryBox from "./components/EntryBox.vue";
+import BkzText from "./components/BkzText.vue";
 
-const com = (a, b) => {
+const $ = (a, b) => {
   Vue.component(a, b);
 };
 
-com("Navbar", Navbar);
-com("left-frame", LeftFrame);
-com("right-frame", RightFrame);
-com("Entry", Entry);
-com("ulu-select", UluSelect);
-com("entry-text", EntryText);
-com("entry-search", EntrySearch);
-com("main-page", Mainpage);
-com("entry-box", EntryBox);
+$("Navbar", Navbar);
+$("left-frame", LeftFrame);
+$("right-frame", RightFrame);
+$("Entry", Entry);
+$("ulu-select", UluSelect);
+$("entry-text", EntryText);
+$("entry-search", EntrySearch);
+$("main-page", Mainpage);
+$("entry-box", EntryBox);
+$("entry-bkz", BkzText);

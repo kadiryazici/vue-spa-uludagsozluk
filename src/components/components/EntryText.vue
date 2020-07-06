@@ -1,177 +1,107 @@
 <template>
-  <div ref="metin" v-html="iyiMetin(metin)" class="entry-content"></div>
+  <div ref="metin" class="entry-content">
+    <component :is="{template: createComponent(metin)}" />
+  </div>
 </template>
 
 <script>
 export default {
   props: ["metin", "nowork"],
   methods: {
-    /**
-     * @description This function is going to convert string to readable string, links to A elememnt and "bkz" links to bkz link.
-     * @param {string} v
-     * @returns {string}
-     */
-
-    iyiMetin(v) {
-      if (this.nowork === "true") {
-        return v;
-      } else {
-        let b = v;
-        b.replace("<", "&lsaquo;");
-        b.replace(">", "&rsaquo;");
-        let a;
-        if (this.$parent.no) {
-          a = b.split(/\s\s\s?/g).join(" <br>");
-        } else {
-          a = b.split("\n").join(" <br>");
-        }
-
-        //Link strings to A element.
-        let links = a.matchAll(/(https?:\/\/[^\s\[]+)/g);
-        let linkMatches = [...links];
-        if (linkMatches.length > 0) {
-          for (const alink of linkMatches) {
-            let aurl = `<a class="bkz-a link-a" target="_blank" href="${alink[0]}">${alink[0]}</a>`;
-            a = a.replace(alink[0], aurl);
-          }
-        }
-
-        //bkz strings to a click event by vue to open new entry.
-        let bkz = a.matchAll(/\(bkz:([^)]+)\)/g);
-        let matches = [...bkz];
-
-        if (matches.length > 0) {
-          for (const entrybkz of matches) {
-            let reg = entrybkz;
-
-            if (!reg[0].includes("#")) {
-              let aElement = `<a class="bkz-a" vue-use-this='${reg[1]
-                .trimStart()
-                .replace(" ", "-")}' target="_blank" 
-                href="${window.location.origin}/?type=baslik&link=${reg[1]
-                .trimStart()
-                .split(" ")
-                .join("-")}">${reg[0]}</a>`;
-
-              a = a.replace(entrybkz[0], aElement);
-            } else {
-              let aElement = `<a class="bkz-a" vue-use-this='${reg[1]
-                .trimStart()
-                .replace(" ", "-")}' target="_blank" 
-                href="${window.location.origin}/?type=entry&link=${reg[1]
-                .split("#")[1]
-                .trimStart()}">${reg[0]}</a>`;
-
-              a = a.replace(entrybkz[0], aElement);
-            }
-          }
-        }
-
-        //img links to an img link.
-        let imgs = a.matchAll(/\(img:([^)]+)\)/g);
-        let imgMatches = [...imgs];
-        if (imgMatches.length > 0) {
-          for (const img of imgMatches) {
-            let aurl = `<a class="bkz-a link-a" target="_blank" href="https://galeri.uludagsozluk.com/r/${img[1]}/">https://galeri.uludagsozluk.com/r/${img[1]}/</a>`.replace(
-              "#",
-              ""
-            );
-            aurl = aurl.split("#").join("");
-            a = a.replace(img[0], aurl);
-          }
-        }
-
-        //video links to a video link.
-        let videos = a.matchAll(/\(vid:([^)]+)\)/g);
-        let videoMatches = [...videos];
-        if (videoMatches.length > 0) {
-          for (const video of videoMatches) {
-            let aurl = `<a class="bkz-a link-a" target="_blank" href="https://video.uludagsozluk.com/v/${video[1]}/">https://video.uludagsozluk.com/v/${video[1]}/</a>`;
-            aurl = aurl.split("#").join("");
-            a = a.replace(video[0], aurl);
-          }
-        }
-
-        if (a.includes("javascript:{}")) {
-          a = a.replace(/javascript:{}\s?/g, "");
-        }
-
-        // strings betwween ` to a click event by vue to open new entry.
-        let quoteBkz = a.matchAll(/\`(.*?)\`/g);
-        let qMatches = [...quoteBkz];
-        if (qMatches.length > 0) {
-          for (const entrybkz of qMatches) {
-            let reg = entrybkz;
-            let aElement = `<a class="bkz-a" vue-use-this='${reg[1]
-              .trimStart()
-              .replace(" ", "-")}' target="_blank" href="${
-              window.location.origin
-            }/?type=baslik&link=${reg[1]
-              .trimStart()
-              .split(" ")
-              .join("-")}">${reg[1]}</a>`;
-            a = a.replace(entrybkz[0], aElement);
-          }
-        }
-
-        return a;
-      }
+    decodeHtml(text) {
+      let a = document.createElement("textarea");
+      a.innerHTML = text;
+      return a.value;
     },
 
-    /**
-     * @description This is going to get "bkz" links and bind an event on them to open a new Page in VUE withour reloading
-     *              the page, not in new tab.
-     */
+    createComponent(v) {
+      let b = v;
+      b.replace(/</g, "&lsaquo;");
+      b.replace(/>/g, "&rsaquo;");
 
-    bkzWindow() {
-      setTimeout(() => {
-        let bkz = this.$refs.metin.querySelectorAll("a[vue-use-this]");
-        bkz.forEach(element => {
-          element.onclick = e => {
-            e.preventDefault();
+      let a;
 
-            let att = element.getAttribute("vue-use-this");
+      if (this.$parent.no) a = b.split(/\s\s/g).join(" <br><br>");
+      else a = b.split("\n").join(" <br>");
 
-            if (att.includes("#")) {
-              let value = att.split("#");
+      //Link strings to A element.
+      let links = a.matchAll(/(https?:\/\/[^\s\[]+)/g);
+      let linkMatches = [...links];
+      for (const alink of linkMatches) {
+        let aurl = `<a class="bkz-a link-a" target="_blank" href="${alink[0]}">${alink[0]}</a>`;
+        a = a.replace(alink[0], aurl);
+      }
 
-              let windowValue = {
-                type: "entry",
-                baslik: (value[0] + " | #" + value[1]).replace(/\//g, ""),
-                basliklink: value[1]
-              };
+      //bkz strings to a click event by vue to open new entry.
+      let bkz = a.matchAll(/\(bkz:([^)]+)\)/g);
+      let matches = [...bkz];
+      for (const entrybkz of matches) {
+        let reg = entrybkz;
 
-              this.$store.commit("addWindow", windowValue);
-              this.$store.dispatch("changeState", {
-                type: "entry",
-                baslik: windowValue.baslik,
-                basliklink: windowValue.basliklink
-              });
-            } else {
-              let windowValue = {
-                type: "baslik",
-                baslik: att,
-                link: att.replace(" ", "-"),
-                sayfa: 1,
-                toplamSayfa: 1
-              };
+        if (!this.decodeHtml(reg[0]).includes("#")) {
+          let bkzEl = `<entry-bkz :bkz="'${reg[1].trim()}'"/>`;
 
-              this.$store.commit("addWindow", windowValue);
+          a = a.replace(entrybkz[0], this.decodeHtml(bkzEl));
+        } else {
+          let entry = entrybkz[1].split("#");
 
-              this.$store.dispatch("changeState", {
-                type: "baslik",
-                baslik: windowValue.baslik,
-                basliklink: windowValue.link
-              });
-            }
-          };
-        });
-      }, 50);
+          a = a.replace(
+            entrybkz[0],
+            `(entry: ${entry[0]}#` + this.decodeHtml(entry[1]) + ")"
+          );
+        }
+      }
+
+      //bkz strings to a click event by vue to open new entry.
+      let mainPageBkz = a.matchAll(/\/e\/([^)]+\/)\)/g);
+      let mainMatches = [...mainPageBkz];
+      for (const entrybkz of mainMatches) {
+        a = a.replace(
+          entrybkz[0],
+          `(entry: #` + this.decodeHtml(entrybkz[1].replace("/", "")) + ")"
+        );
+      }
+
+      //img links to an img link.
+      let imgs = a.matchAll(/\(img:([^)]+)\)/g);
+      let imgMatches = [...imgs];
+      for (const img of imgMatches) {
+        let aurl = `<a class="bkz-a link-a" target="_blank" href="https://galeri.uludagsozluk.com/r/${img[1]}/">(görüntü: ${img[1]})</a>`.replace(
+          "#",
+          ""
+        );
+        aurl = aurl.split("#").join("");
+        a = a.replace(img[0], aurl);
+      }
+
+      //video links to a video link.
+      let videos = a.matchAll(/\(vid:([^)]+)\)/g);
+      let videoMatches = [...videos];
+      for (const video of videoMatches) {
+        let aurl = `<a class="bkz-a link-a" target="_blank" href="https://video.uludagsozluk.com/v/${video[1]}/">(video: ${video[1]})</a>`;
+        aurl = aurl.split("#").join("");
+        a = a.replace(video[0], aurl);
+      }
+
+      if (a.includes("javascript:{}")) {
+        a = a.replace(/javascript:{}\s?/g, "");
+      }
+
+      // strings betwween ` to a click event by vue to open new entry.
+      let quoteBkz = a.matchAll(/\`(.*?)\`/g);
+      let qMatches = [...quoteBkz];
+      for (const entrybkz of qMatches) {
+        let bkzEl = `<entry-bkz :quote="true" :bkz="'${entrybkz[1].trim()}'"/>`;
+        a = a.replace(entrybkz[0], this.decodeHtml(bkzEl));
+      }
+
+      a = a.replace(
+        /\-\-spoiler\-\-/g,
+        `<entry-bkz :quote="true" bkz="--spoiler--" />`
+      );
+
+      return "<span>" + a + "</span>";
     }
-  },
-
-  mounted() {
-    this.bkzWindow();
   }
 };
 </script>

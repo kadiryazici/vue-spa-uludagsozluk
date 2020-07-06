@@ -1,9 +1,7 @@
 import Vue from "vue";
 import Vuex from "vuex";
 
-// IF YOU WANT TO GET YOUR OWN KEY VISIT THIS WEBSITE: http://www.uludagsozluk.com/api/?c=getkey
-import secret from "../secretVars";
-let apiKey = secret.apiKey;
+let apiKey = process.env.VUE_APP_KEY;
 
 Vue.use(Vuex);
 
@@ -117,7 +115,6 @@ export default new Vuex.Store({
           payload.callback("error");
         });
     },
-
     /**
      * @param {Vuex} param0
      * @param {Object} payload

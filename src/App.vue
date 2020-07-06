@@ -16,14 +16,8 @@
 export default {
   name: "App",
   methods: {
-    /**
-     * @description When user enters website if the user has type,link query parameters in url
-     *              redirect user to that spesific page.
-     *
-     */
     urlFunc() {
-      let params = new URL(decodeURI(window.location.href));
-      let param = new URLSearchParams(params.search.slice(1));
+      let param = new URLSearchParams(window.location.search);
       let type = param.get("type");
       let link = param.get("link");
       let sayfa = param.get("sayfa");
@@ -48,12 +42,9 @@ export default {
         });
       }
     },
-    /**
-     * @description Handles navigation.
-     */
+
     popState() {
       window.onpopstate = e => {
-        console.log(e);
         if (e.state == null || e.state == "") {
           //if user goes to main page.
           document.title = "Vuedag";
@@ -64,12 +55,12 @@ export default {
         } else {
           //if user doesnt go to first page.
           if (this.windowCount <= e.state.i) {
-            let { type, link, baslik } = e.state;
+            let { type, link, baslik, sayfa } = e.state;
             this.$store.commit("addWindow", {
               type,
               baslik,
               link,
-              sayfa: 1,
+              sayfa: sayfa || 1,
               toplamSayfa: 1
             });
           } else {
@@ -88,17 +79,21 @@ export default {
     this.urlFunc();
     this.popState();
   },
+
   computed: {
     getCurrentWindow() {
       return this.$store.getters.getCurrentWindow;
     },
+
     windowCount() {
       return this.$store.getters.getOpenWindows.length;
     },
+
     isBack() {
       return this.$store.getters.getBack;
     }
   },
+
   watch: {
     isBack() {
       window.history.back();
@@ -125,9 +120,9 @@ export default {
 body {
   font-family: "Roboto", sans-serif;
   padding-top: 50px;
-  padding-left: 20px;
-  padding-right: 20px;
-  background-color: rgb(39, 39, 39);
+  padding-left: 10px;
+  padding-right: 10px;
+  background-color: var(--uludag-background);
   min-height: 100vh;
   min-width: 850px;
   margin: 0px;
@@ -156,7 +151,6 @@ body {
 .right {
   width: 100%;
   margin-left: 10px;
-  background-color: rgb(39, 39, 39);
   border-radius: 5px;
   overflow: hidden;
   max-height: 100%;
@@ -169,7 +163,6 @@ body {
 
 ::-webkit-scrollbar-track {
   background-color: transparent;
-  background-color: rgb(53, 53, 53);
 }
 
 ::-webkit-scrollbar-thumb {
@@ -179,23 +172,18 @@ body {
 }
 
 :root {
-  --uludag-theme: #546fa1;
+  --uludag-theme: #a12e68;
   --uludag-dark-purple: rgb(45, 45, 57);
-  --uludag-dark-purple-opacity: rgba(45, 45, 57, 0.55);
-  --uludag-dark: rgb(20, 20, 20);
+  --uludag-dark-purple-opacity: rgba(61, 53, 73, 0.479);
+  --uludag-dark: #0e0d0d;
+  --uludag-entry-background: #2e3242d2;
+  --uludag-background: #2f3033;
   --uludag-dark-purple-shadow: 0px 0px 8px -1px rgba(41, 42, 58, 0.438);
-  --uludag-light: rgb(230, 230, 230);
+  --uludag-light: #d4d9e4;
   --uludag-scroll: rgb(155, 168, 179);
-  --active-gradient: linear-gradient(
-    90deg,
-    #546fa181 0%,
-    rgba(84, 111, 161, 0) 100%
-  );
-  --current-gradient: linear-gradient(
-    90deg,
-    rgba(238, 129, 56, 0.534) 0%,
-    rgba(84, 111, 161, 0) 100%
-  );
+  --uludag-section-background: rgb(39, 39, 39);
+  --active-gradient: rgba(78, 78, 158, 0);
+  --current-gradient: #a12e6736;
 }
 
 .button {
@@ -215,11 +203,7 @@ body {
   outline: none;
 }
 
-.button:hover {
-  box-shadow: 0px 0px 20px -6px #fff;
-}
-
 .button:active {
-  color: var(--uludag-theme);
+  color: var(--uludag-dark);
 }
 </style>

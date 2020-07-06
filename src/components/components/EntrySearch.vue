@@ -65,7 +65,7 @@ export default {
     this.$refs.searchinput.focus();
   },
   activated() {
-    console.log("annen");
+    this.$refs.searchinput.focus();
   }
 };
 </script>

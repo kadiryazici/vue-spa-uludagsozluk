@@ -1,55 +1,40 @@
 <template>
   <div class="w-100">
-    <h4 @click="open(entry.baslik)" v-if="!no" class="baslik my-3 py-2 px-3">
-      {{ entry.baslik }}
-    </h4>
+    <h4 @click="open(entry.baslik)" v-if="!no" class="baslik my-3 py-2 px-3">{{ entry.baslik }}</h4>
     <div class="entry p-3 mb-4">
       <div class="pb-2 entry-no">
-        <small class="">{{ no ? no + " ." : "" }}</small>
+        <small class>{{ no ? no + " ." : "" }}</small>
       </div>
       <entry-text :metin="entry.metin" />
       <div class="entry-info pt-3">
-        <span
-          :style="`background-image:url('${entry.uye_foto}')`"
-          class="image"
-        >
-        </span>
+        <span :style="`background-image:url('${entry.uye_foto}')`" class="image"></span>
         <span :data-yazar="entry.yazar" class="yazar ml-2">
-          <a
-            :href="entry.yazar | toTR"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
+          <a :href="entry.yazar | toTR" target="_blank" rel="noopener noreferrer">
             {{ entry.yazar }}
             <span
               style="font-size:17px;position:relative;bottom:-3px"
               class="material-icons"
-              >launch</span
-            >
+            >launch</span>
           </a>
         </span>
         <div class="ml-auto diger-bilgiler d-flex align-items-center">
           <span class="up-down d-flex align-items-center">
             <span
               :class="{
-                color: parseInt(entry.arti_oy) > parseInt(entry.eksi_oy),
+                color: parseInt(entry.arti_oy) > parseInt(entry.eksi_oy) || parseInt(entry.arti_oy) == parseInt(entry.eksi_oy) && parseInt(entry.arti_oy) != 0 ,
               }"
               class="up material-icons"
-              >keyboard_arrow_up</span
-            >
+            >keyboard_arrow_up</span>
             {{ entry.arti_oy }}
             <span
               :class="{
-                color: parseInt(entry.eksi_oy) > parseInt(entry.arti_oy),
+                color: parseInt(entry.eksi_oy) > parseInt(entry.arti_oy) ||  parseInt(entry.eksi_oy) == parseInt(entry.arti_oy) && parseInt(entry.eksi_oy) != 0 ,
               }"
               class="down material-icons"
-              >keyboard_arrow_down</span
-            >
+            >keyboard_arrow_down</span>
             {{ entry.eksi_oy }}
           </span>
-          <span class="pl-3 tarih">
-            {{ entry.tarih }}
-          </span>
+          <span class="pl-3 tarih">{{ entry.tarih }}</span>
         </div>
       </div>
     </div>
@@ -84,7 +69,7 @@ export default {
       let link = "https://" + trValue + ".uludagsozluk.com";
 
       return link;
-    },
+    }
   },
   methods: {
     open(att) {
@@ -93,16 +78,16 @@ export default {
         baslik: att,
         link: att.split(" ").join("-"),
         sayfa: 1,
-        toplamSayfa: 1,
+        toplamSayfa: 1
       };
       this.$store.commit("addWindow", windowValue);
       this.$store.dispatch("changeState", {
         type: windowValue.type,
         baslik: windowValue.baslik,
-        basliklink: windowValue.link,
+        basliklink: windowValue.link
       });
-    },
-  },
+    }
+  }
 };
 </script>
 
@@ -121,7 +106,7 @@ export default {
 }
 
 .entry {
-  background-color: rgba(77, 78, 105, 0.438);
+  background-color: var(--uludag-entry-background);
   box-shadow: 0px 0px 8px -1px rgba(111, 115, 181, 0.438);
 }
 .entry-info {
