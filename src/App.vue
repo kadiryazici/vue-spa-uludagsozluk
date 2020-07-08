@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <Navbar />
-    <div :class="{ blurry: $store.getters['getSearchBox'] == true }" class="content">
+    <div :class="{ blurry: $store.getters['getSearchBox'] === true }" class="content">
       <div class="left">
         <left-frame />
       </div>
@@ -45,7 +45,7 @@ export default {
 
     popState() {
       window.onpopstate = e => {
-        if (e.state == null || e.state == "") {
+        if (e.state == null || e.state === "") {
           //if user goes to main page.
           document.title = "Vuedag";
           this.$store.commit("closeWindowsByRange", {
@@ -125,12 +125,12 @@ body {
   background-color: var(--uludag-background);
   min-height: 100vh;
   min-width: 850px;
-  margin: 0px;
+  margin: 0;
 }
 
 .content {
   display: flex;
-  transition: filter 0.3s, -webkit-filter 0.3s;
+  /*transition: filter 0.3s, -webkit-filter 0.3s;*/
   flex-wrap: nowrap;
   max-height: calc(100vh - 65px);
   height: calc(100vh - 65px);
