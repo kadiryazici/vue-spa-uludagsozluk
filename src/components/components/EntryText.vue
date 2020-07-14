@@ -51,7 +51,7 @@ export default {
       }
 
       //video links to an img link.
-      let testVideo = test.matchAll(/\(img:([^)]+)\)/g);
+      let testVideo = test.matchAll(/\(vid:([^)]+)\)/g);
       let testVideoMatches = [...testVideo];
       for (const video of testVideoMatches) {
         test = test.replace(video[0], `!*(link:https://video.uludagsozluk.com/v/${video[1].split('#').join('')})!*`);
