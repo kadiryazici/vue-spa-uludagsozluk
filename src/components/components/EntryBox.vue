@@ -1,15 +1,30 @@
 <template>
   <div class="w-100">
-    <h4 @click="open(entry.baslik)" v-if="!no" class="baslik my-3 py-2 px-3">{{ entry.baslik }}</h4>
+    <h4
+      @click="open(entry.baslik)"
+      v-if="!no"
+      class="baslik my-3 py-2 px-3"
+    >{{ entry.baslik }}</h4>
     <div class="entry p-3 mb-4">
       <div class="pb-2 entry-no">
         <small class>{{ no ? no + " ." : "" }}</small>
       </div>
       <entry-text :metin="entry.metin" />
       <div class="entry-info pt-3">
-        <span :style="`background-image:url('${entry.uye_foto}')`" class="image"></span>
-        <span :data-yazar="entry.yazar" class="yazar ml-2">
-          <a :href="entry.yazar | toTR" target="_blank" rel="noopener noreferrer">
+        <span
+          :style="`background-image:url('${entry.uye_foto}')`"
+          class="image"
+        ></span>
+        <span
+          :data-yazar="entry.yazar"
+          class="yazar ml-2"
+        >
+          <a
+            class="context-link"
+            :href="entry.yazar | toTR"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             {{ entry.yazar }}
             <span
               style="font-size:17px;position:relative;bottom:-3px"

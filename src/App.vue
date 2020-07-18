@@ -1,21 +1,56 @@
 <template>
   <div id="app">
     <Navbar />
-    <div :class="{ blurry: $store.getters['getSearchBox'] === true }" class="content">
+    <div
+      @mousedown="contextmenu = false"
+      :class="{ blurry: $store.getters['getSearchBox'] === true }"
+      class="content"
+    >
       <div class="left">
         <left-frame />
       </div>
-      <div class="right">
+      <div
+        @contextmenu.prevent="handler"
+        @wheel="contextmenu = false"
+        class="right"
+      >
         <right-frame />
       </div>
     </div>
+    <ContextMenu
+      @click.stop
+      :event="target"
+      :style="style"
+      v-if="contextmenu"
+      @selected="contextmenu = false"
+      :key="key"
+    />
   </div>
 </template>
 
 <script>
 export default {
   name: "App",
+  data() {
+    return {
+      contextmenu: false,
+      style: {
+        top: 0,
+        left: 0
+      },
+      target: null,
+      key: 'selamlar'
+    }
+  },
+  components: {
+    ContextMenu: () => import('./components/components/ContextMenu')
+  },
   methods: {
+    handler(e) {
+      this.target = e;
+      this.key = Math.random().toString();
+      this.contextmenu = true;
+    },
     urlFunc() {
       let param = new URLSearchParams(window.location.search);
       let type = param.get("type");
@@ -108,8 +143,14 @@ export default {
 @import url("./assets/icons.css");
 @import url("./assets/animations.css");
 
+.material-icons {
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
 * {
-  scrollbar-width: thin;
+  outline: none;
   font-family: "Roboto", sans-serif;
 }
 
@@ -125,6 +166,7 @@ body {
   background-color: var(--uludag-background);
   min-height: 100vh;
   min-width: 850px;
+  overflow: hidden;
   margin: 0;
 }
 
