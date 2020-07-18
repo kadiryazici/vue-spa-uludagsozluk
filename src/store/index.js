@@ -1,7 +1,8 @@
 import Vue from "vue";
 import Vuex from "vuex";
+import KEY from "../secretVars";
 
-let apiKey = process.env.VUE_APP_KEY;
+let apiKey = KEY;
 
 Vue.use(Vuex);
 
@@ -102,7 +103,7 @@ export default new Vuex.Store({
     async fetchEntry({ state }, payload) {
       await fetch(
         `https://www.uludagsozluk.com/api/?a=${apiKey}&n=baslik&b=${
-          payload.link
+        payload.link
         }&ls=${payload.ba * 20 - 20}&le=20&desc=1`
       )
         .then((result) => {
@@ -121,7 +122,7 @@ export default new Vuex.Store({
      * @param {String} payload.text
      * @param {Function} payload.callback The function that will pass parameters and be executed after fetching;
      */
-    async fetchSearch({}, payload) {
+    async fetchSearch({ }, payload) {
       await fetch(
         `https://www.uludagsozluk.com/api/?a=${apiKey}&n=arama&k=${payload.text}&ls=0&le=15&desc=1`
       )
@@ -157,7 +158,7 @@ export default new Vuex.Store({
           useObject,
           "",
           `?type=${useObject.type}&link=${useObject.link}${
-            useObject.type == "baslik" ? `&sayfa=${useObject.sayfa}` : ""
+          useObject.type == "baslik" ? `&sayfa=${useObject.sayfa}` : ""
           }`
         );
         document.title = useObject.baslik + " | Vuedag";
@@ -166,7 +167,7 @@ export default new Vuex.Store({
           useObject,
           "",
           `?type=${useObject.type}&link=${useObject.link}${
-            useObject.type == "baslik" ? `&sayfa=${useObject.sayfa}` : ""
+          useObject.type == "baslik" ? `&sayfa=${useObject.sayfa}` : ""
           }`
         );
       }

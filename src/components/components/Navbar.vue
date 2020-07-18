@@ -7,9 +7,7 @@
       />
     </keep-alive>
     <div class="position-relative title-bar">
-      <small
-        class="info-title position-absolute title w-100 h-100 d-flex align-items-center justify-content-center"
-      >{{ "ULUDAĞ SÖZLÜK" }}</small>
+      <small class="info-title position-absolute title w-100 h-100 d-flex align-items-center justify-content-center">{{ "ULUDAĞ SÖZLÜK" }}</small>
       <div class="search">
         <button
           @click="
@@ -17,11 +15,20 @@
           "
           class="min"
         >
-          <span style="font-size:21px" class="material-icons pr-2">search</span>
+          <span
+            style="font-size:21px"
+            class="material-icons pr-2"
+          >search</span>
           Arama
         </button>
-        <button @click="$store.commit('closeWindows')" class="min">
-          <span style="font-size:21px" class="material-icons pr-2">close</span>
+        <button
+          @click="$store.commit('closeWindows')"
+          class="min"
+        >
+          <span
+            style="font-size:21px"
+            class="material-icons pr-2"
+          >close</span>
           Tüm Pencereleri Kapat
         </button>
       </div>
@@ -94,7 +101,6 @@ export default {
 
 .navbar {
   width: 100%;
-  min-width: 850px;
   /* height: 60px; */
   z-index: 3;
   background-color: var(--uludag-dark);

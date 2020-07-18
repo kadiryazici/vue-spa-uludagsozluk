@@ -3,6 +3,7 @@ dist/
 node_modules/
 .firebaserc
 firebase.json
+src/secretVars.js
 
 # local env files
 .env.local
@@ -22,3 +23,4 @@ pnpm-debug.log*g
 *.njsproj
 *.sln
 *.sw?
+node_modules

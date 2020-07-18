@@ -1,14 +1,20 @@
 <template>
   <div class="pb-1 pt-0 left-wrapper">
-    <h6 style="z-index:50" class="left-header sticky-top d-flex align-items-center m-0">
-      <span>Gündem</span>
+    <h6
+      style="z-index:50"
+      class="left-header sticky-top d-flex align-items-center m-0"
+    >
+      <span style="padding-bottom:6px">Gündem</span>
       <span
         tabindex="0"
         @click="$store.dispatch('fetchGundem')"
         class="mb-1 refresh ml-auto material-icons"
       >refresh</span>
     </h6>
-    <div class="h-100" style="overflow-x:hidden;overflow-y:auto;">
+    <div
+      class="h-100"
+      style="overflow-x:hidden;overflow-y:auto;"
+    >
       <h6
         v-if="basliklar.bugun == undefined"
         class="m-0 p-3 text-center"
@@ -89,12 +95,12 @@ export default {
   font-size: 15px;
   font-weight: bold;
   height: 41px;
-  padding: 6px 2px 6px 14px;
+  padding: 10px 2px 2px 14px;
 }
 .baslik {
   color: white;
   width: 100%;
-  font-size: 14px;
+  font-size: 15px;
   max-height: 100%;
   overflow: auto;
   position: relative;
@@ -103,10 +109,6 @@ export default {
 .baslik:hover {
   background-color: var(--uludag-dark-purple);
   cursor: pointer;
-}
-
-.material-icons {
-  color: var(--uludag-theme);
 }
 
 .baslik.active::after {
@@ -127,7 +129,7 @@ export default {
 }
 
 .left-wrapper {
-  background-color: var(--uludag-dark);
+  background-color: rgb(20, 20, 20);
   height: 100%;
   overflow: hidden;
   border-radius: 5px;
@@ -141,15 +143,16 @@ export default {
 
 .refresh {
   cursor: pointer;
-  transition: all 0.6s ease;
+  transition: all 0.5s;
   font-size: 29px;
-  margin-top: 3px;
+  padding-bottom: 2px;
+  padding-right: 2px;
   margin-right: 5px;
   transform-origin: center;
 }
 .refresh:hover {
   color: var(--uludag-dark);
-  transform: rotate(720deg);
+  transform: rotate(180deg);
   transform-origin: center;
 }
 .refresh:focus {

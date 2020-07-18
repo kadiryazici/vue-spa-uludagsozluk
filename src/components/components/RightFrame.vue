@@ -1,6 +1,9 @@
 <template>
   <div class="position-relative h-100 w-100">
-    <transition-group enter-active-class="fadeInLeft" leave-active-class="fadeOutRight closing">
+    <transition-group
+      enter-active-class="fadeInLeft"
+      leave-active-class="fadeOutRight closing"
+    >
       <div
         v-for="(value, index) in windows"
         :key="index + 5"
@@ -14,8 +17,14 @@
           active: index == windows.length - 1,
         }"
       >
-        <div v-if="index > 0" class="back-button">
-          <span @click="closeWindow" class="pt-2 pl-3 pb-2 icon material-icons">arrow_back_ios</span>
+        <div
+          v-if="index > 0"
+          class="back-button"
+        >
+          <span
+            @click="closeWindow"
+            class="pt-2 pl-3 pb-2 icon material-icons"
+          >arrow_back_ios</span>
           <p class="title">{{ value.baslik.split("-").join(" ") }}</p>
           <span class="ml-auto mr-3">
             <ulu-select
@@ -27,7 +36,10 @@
           </span>
         </div>
 
-        <div v-if="value.type == 'Main'" class="back-button">
+        <div
+          v-if="value.type == 'Main'"
+          class="back-button"
+        >
           <span
             style="visibility:hidden;pointer-events:none;margin-right:-43px"
             class="pt-2 pl-3 pb-2 icon material-icons"
@@ -35,8 +47,15 @@
           <p class="title">{{ "Tavsiyeler" }}</p>
         </div>
 
-        <div style="color:white" class="h-100 windowContent">
-          <Entry v-if="value.type === 'baslik'" :entryData="value" :beginning="value.sayfa" />
+        <div
+          style="color:white"
+          class="h-100 windowContent"
+        >
+          <Entry
+            v-if="value.type === 'baslik'"
+            :entryData="value"
+            :beginning="value.sayfa"
+          />
           <main-page v-else-if="value.type === 'Main'" />
         </div>
       </div>
@@ -134,8 +153,9 @@ export default {
 }
 
 .windowContent {
-  background-color: var(--uludag-dark);
-  border-bottom: 2px solid var(--uludag-dark);
+  background-color: rgb(20, 20, 20);
+  border: 3px solid rgb(20, 20, 20);
+  border-right: 0px;
   padding: 5px;
   max-height: 100%;
   overflow-y: auto;
